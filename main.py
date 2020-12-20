@@ -95,7 +95,7 @@ def mail_it():
 """
 
     for record in cursor.execute("SELECT * FROM alix WHERE 1").fetchall():
-        if (int(record[1].spit(".")[0])/2)*100 >= 85:
+        if (int(record[1].split(".")[0])/2)*100 >= 85:
             report += f"""
             <tr class= "better">
                 <td scope="row">{record[0]}</td>
@@ -116,7 +116,7 @@ def mail_it():
 </html>
 """
 
-        elif (int(record[1].spit(".")[0])/2)*100 >= 65:
+        elif (int(record[1].split(".")[0])/2)*100 >= 65:
             report += f"""
             <tr class= "moderate">
                 <td scope="row">{record[0]}</td>
@@ -158,7 +158,7 @@ def mail_it():
 </html>
 """
 
-    with open("report.html") as f:
+    with open("report.html", "w") as f:
         f.write(report)
 
     sendmail()
@@ -188,8 +188,8 @@ if __name__ == "__main__":
 
     today = str(datetime.datetime.now().strftime("%d/%m/%y"))
 
+    points = 0
     for record in cursor.execute("SELECT * FROM alix WHERE 1").fetchall():
-        points = 0
         points += float(record[1])
 
     cursor.execute("""
@@ -214,7 +214,7 @@ if __name__ == "__main__":
                 int(days),
                 float(marks.split("/")[0]),
                 float(marks.split("/")[1]),
-                points
+                float(points)
                 )["points_get"],
             target,
             marks,
